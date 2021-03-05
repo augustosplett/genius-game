@@ -8,7 +8,7 @@ const yellow = document.querySelector('.yellow');
 const green = document.querySelector('.green');
 
 let shuffleOrder = () => {
-    let colorOrder = Math.floor(Math.random()*4);
+    let colorOrder = Math.floor(Math.random() * 4);
     order[order.length] = colorOrder;
     clickedOrder = [];
 
@@ -19,19 +19,19 @@ let shuffleOrder = () => {
 }
 
 let lightColor = (element, number) => {
-    time = time * 500;
+    number = number * 500;
     setTimeout(() => {
         element.classList.add('selected');
-    }, number - 250 );
+    }, number - 250);
     setTimeout(() => {
         element.classList.remove('selected');
-    });
+    }, number );
 }
 
 let checkOrder = () =>{
     for(let i in clickedOrder){
         if(clickedOrder[i] != order[i]) {
-            lose();
+            gameOver();
             break;
         }
     }
@@ -40,3 +40,56 @@ let checkOrder = () =>{
         nextLevel();
     }
 }
+
+let click = (color) => {
+    clickedOrder[clickedOrder.length] = color;
+    createColorElement(color).classList.add('selected');
+
+    setTimeout(() => {
+        createColorElement(color).classList.remove('selected'); 
+        checkOrder();
+    }, 250 );
+}
+
+let createColorElement = (color) => {
+    if(color ==0){
+        return green;
+    }else if(color == 1){
+        return red;
+    }else if(color == 2){
+        return yellow;
+    }else if(color == 3){
+        return blue;
+    }
+}
+
+let nextLevel = () => {
+    score++;
+    shuffleOrder();
+}
+
+let gameOver = () => {
+    alert(`Pontuação: ${score}\nVocê perdeu o jogo!\nClique em OK para um novo jogo`);
+    order = [];
+    clickedOrder = [];
+    playgame();
+}
+
+let playGame = () =>{
+    alert(`Bem vindo ao Genesis! \nIniciando novo Jogo!`)
+    score = 0;
+
+    nextLevel();
+}
+
+green.onclick = () => click(0);
+red.onclick = () => click(1);
+yellow.onclick = () => click(2);
+blue.onclick = () => click(3);
+
+//green.addEventListener('click', click(0));
+//red.addEventListener('click', click(1));
+//yellow.addEventListener('click', click(2));
+//blue.addEventListener('click', click(3));
+
+playGame();
